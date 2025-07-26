@@ -157,10 +157,7 @@ export function LiveFeed({ questions }: LiveFeedProps) {
 
               {expandedItems.has(question.id) && (
                 <div className="border-t border-white/10 pt-4 mt-4" onClick={(e) => e.stopPropagation()}>
-                  <p className="text-sm text-gray-400 mb-3">Generated Answer:</p>
-                  <div className="mb-3">
-                    <p className="text-sm text-gray-300 mb-2">{question.answer.explanation}</p>
-                  </div>
+                  <p className="text-sm text-gray-400 mb-3">Generated Code:</p>
                   <pre className="code-block rounded-lg p-4 text-sm overflow-x-auto">
                     <code className={`language-${question.answer.language}`}>
                       {question.answer.code}

@@ -106,11 +106,6 @@ export function AnswerDisplay() {
               </code>
             </pre>
           </div>
-
-          <div>
-            <h4 className="text-lg font-semibold text-white mb-3">Explanation:</h4>
-            <p className="text-gray-300 leading-relaxed">{currentAnswer.answer.explanation}</p>
-          </div>
         </div>
       </div>
     </div>
