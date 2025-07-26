@@ -34,6 +34,8 @@ export const insertQuestionSchema = createInsertSchema(questions).omit({
 export const submitQuestionSchema = z.object({
   userName: z.string().min(1, "Name is required").max(50, "Name too long"),
   question: z.string().min(10, "Question must be at least 10 characters").max(1000, "Question too long"),
+  userCode: z.string().optional(),
+  hasCode: z.boolean().optional(),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

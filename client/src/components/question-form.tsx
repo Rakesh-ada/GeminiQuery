@@ -8,12 +8,15 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Loader2 } from "lucide-react";
+import { Loader2, Code } from "lucide-react";
 
 const formSchema = z.object({
   userName: z.string().min(1, "Name is required").max(50, "Name too long"),
   question: z.string().min(10, "Question must be at least 10 characters").max(1000, "Question too long"),
+  userCode: z.string().optional(),
+  hasCode: z.boolean().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -25,12 +28,15 @@ interface QuestionFormProps {
 export function QuestionForm({ onQuestionSubmitted }: QuestionFormProps) {
   const { toast } = useToast();
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
+  const [hasCode, setHasCode] = useState(false);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       userName: "",
       question: "",
+      userCode: "",
+      hasCode: false,
     },
   });
 
@@ -110,6 +116,47 @@ export function QuestionForm({ onQuestionSubmitted }: QuestionFormProps) {
               </FormItem>
             )}
           />
+
+          {/* Toggle for user code */}
+          <div className="flex items-center space-x-3 p-4 bg-black/20 rounded-xl border border-white/10">
+            <Switch
+              checked={hasCode}
+              onCheckedChange={(checked) => {
+                setHasCode(checked);
+                form.setValue("hasCode", checked);
+                if (!checked) {
+                  form.setValue("userCode", "");
+                }
+              }}
+              className="data-[state=checked]:bg-purple-600"
+            />
+            <div className="flex items-center space-x-2">
+              <Code className="w-4 h-4 text-purple-400" />
+              <span className="text-sm text-gray-300">I have code to share</span>
+            </div>
+          </div>
+
+          {/* User code input */}
+          {hasCode && (
+            <FormField
+              control={form.control}
+              name="userCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="block text-sm font-medium text-gray-300">Your Code</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      rows={6}
+                      placeholder="Paste your code here..."
+                      className="w-full px-4 py-3 bg-black/30 border border-white/20 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all backdrop-blur-sm resize-none font-mono text-sm"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
           <Button
             type="submit"

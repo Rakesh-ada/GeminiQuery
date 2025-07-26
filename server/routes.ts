@@ -13,7 +13,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const validatedData = submitQuestionSchema.parse(req.body);
       
       // Generate answer using Gemini AI
-      const generatedAnswer = await generateProgrammingAnswer(validatedData.question);
+      const generatedAnswer = await generateProgrammingAnswer(
+        validatedData.question, 
+        validatedData.userCode
+      );
       
       // Store the question and answer
       const question = await storage.createQuestion({

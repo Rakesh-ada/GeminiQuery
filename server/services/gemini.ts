@@ -10,16 +10,20 @@ export interface GeneratedAnswer {
   language: string;
 }
 
-export async function generateProgrammingAnswer(question: string): Promise<GeneratedAnswer> {
+export async function generateProgrammingAnswer(question: string, userCode?: string): Promise<GeneratedAnswer> {
   try {
-    const prompt = `You are an expert programming assistant. Answer the following programming question with:
+    let prompt = `You are an expert programming assistant. Answer the following programming question with:
 1. Clean, working code that solves the problem
 2. A clear explanation of how the solution works
 3. Best practices and any important notes
 
-Question: ${question}
+Question: ${question}`;
 
-Please respond in JSON format with:
+    if (userCode) {
+      prompt += `\n\nUser has provided their existing code:\n\`\`\`\n${userCode}\n\`\`\`\n\nPlease review, improve, debug, or extend this code as needed based on the question.`;
+    }
+
+    prompt += `\n\nPlease respond in JSON format with:
 {
   "code": "the complete code solution",
   "explanation": "detailed explanation of the solution",
